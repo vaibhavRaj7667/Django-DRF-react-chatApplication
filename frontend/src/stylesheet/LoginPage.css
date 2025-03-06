@@ -1,0 +1,135 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: "Gill Sans", sans-serif;
+
+}
+
+.main {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+
+}
+
+.picture {
+    display: flex;
+    height: 100%;
+    width: 50%;
+    align-items: center;
+    justify-content: center;
+}
+
+.picture img {
+    height: 70vh;
+    margin-left: 30vh;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+
+}
+
+.login-creditions {
+
+    width: 50%;
+    display: flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    padding: 30px;
+    border-radius: 20px;
+
+}
+
+.register {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    border-radius: 20px;
+}
+
+p {
+    margin-bottom: 2px;
+}
+
+.ternary-button {
+    border: none;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+
+
+
+.login input {
+    padding: 17px;
+    border: 1px solid black;
+    border-radius: 18px;
+    width: 45vh;
+    margin-bottom: 15px;
+}
+
+.register input {
+
+    padding: 17px;
+    border: 1px solid black;
+    border-radius: 18px;
+    width: 45vh;
+    margin-bottom: 15px;
+
+
+}
+
+.register input::placeholder {
+    color: black;
+    font-weight: 500;
+}
+
+
+
+.login input::placeholder {
+    color: black;
+    font-weight: 500;
+}
+
+.login h1 {
+    font-family: "Gill Sans", sans-serif;
+}
+
+.login-button {
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 18px;
+    background-color: rgb(218, 31, 31);
+    padding: 10px;
+    width: 50vh;
+}
+
+.Register_button {
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 18px;
+    background-color: rgb(218, 31, 31);
+    padding: 10px;
+    width: 50vh;
+}
+
+.link-like {
+    border: none;
+    background-color: transparent;
+    text-decoration: underline;
+}
