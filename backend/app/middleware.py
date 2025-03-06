@@ -57,6 +57,7 @@ class JWTAuthMiddleware:
         
         # Initialize variables
         token = parsed_query.get("token", [None])[0]
+        
         scope["user"] = AnonymousUser()  # Default user
         scope["extra_data"] = {}
 

@@ -8,6 +8,8 @@ from rest_framework import status
 from app.models import FriendList
 from django.shortcuts import get_object_or_404
 
+#this is test gitpush
+
 class ProtectedView(APIView):
     permission_classes = [IsAuthenticated]
 
