@@ -27,4 +27,5 @@ urlpatterns = [
     path('register/', createuser.as_view(), name="createuser"),
     path('friends/',UserList.as_view() ),
     path('friends/<int:user_id>/', UserFriendsView.as_view(), name='user-friends'),
+    path('request/',AddFriendView.as_view(),name="AddFriendView"),
 ]

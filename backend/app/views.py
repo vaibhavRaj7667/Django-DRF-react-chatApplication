@@ -31,27 +31,35 @@ class UserList(APIView):
 class UserFriendsView(APIView):
     def get(self, request, user_id):
         print(request.user)
-        user = get_object_or_404(User, id=user_id)  # Ensure user exists
+        user = get_object_or_404(User, id=user_id)
 
         friends = Friend.objects.filter(user=user, status='accepted').values_list('friend', flat=True)
 
-        # Combine both sets of friendships
+       
         friend_ids = list(friends) 
-        friends = User.objects.filter(id__in=friend_ids)  # Fetch User objects
+        friends = User.objects.filter(id__in=friend_ids)  
 
         serializer = UserSerializer(friends, many=True)  
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def post(self, request, user_id):
-        # user_to_add = get_object_or_404(User, id=user_id)
+class AddFriendView(APIView):
+    def post(self, request):
+        user = request.user  
+        friend_id = request.data.get("friend_id")  
+        
+        try:
+            friend = User.objects.get(id=friend_id)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        friend_list, created = Friend.objects.get_or_create(user=request.user)
-        friend = User.objects.get(id = user_id)
+       
+        if Friend.objects.filter(user=user, friend=friend).exists() or Friend.objects.filter(user=friend, friend=user).exists():
+            return Response({"error": "Friend request already sent or user is already your friend."}, status=status.HTTP_400_BAD_REQUEST)
 
-        friend_list.add_friend(friend)
+       
+        friend_request = Friend.objects.create(user=user, friend=friend, status="pending")
 
-        return Response(status=status.HTTP_201_CREATED)
-
+        return Response({"message": "Friend request sent!"}, status=status.HTTP_201_CREATED)
         
     
 
