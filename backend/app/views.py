@@ -5,7 +5,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from app.models import FriendList
+# from app.models import FriendList
+from app.models import Friend
+
 from django.shortcuts import get_object_or_404
 
 
@@ -26,19 +28,24 @@ class UserList(APIView):
         return Response(serializer.data , status=status.HTTP_200_OK)
     
 
-
 class UserFriendsView(APIView):
     def get(self, request, user_id):
         print(request.user)
-        friend_list = get_object_or_404(FriendList, user__id=user_id)  
-        friends = friend_list.friends.all()  
+        user = get_object_or_404(User, id=user_id)  # Ensure user exists
+
+        friends = Friend.objects.filter(user=user, status='accepted').values_list('friend', flat=True)
+
+        # Combine both sets of friendships
+        friend_ids = list(friends) 
+        friends = User.objects.filter(id__in=friend_ids)  # Fetch User objects
+
         serializer = UserSerializer(friends, many=True)  
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def post(self, request, user_id):
         # user_to_add = get_object_or_404(User, id=user_id)
 
-        friend_list, created = FriendList.objects.get_or_create(user=request.user)
+        friend_list, created = Friend.objects.get_or_create(user=request.user)
         friend = User.objects.get(id = user_id)
 
         friend_list.add_friend(friend)

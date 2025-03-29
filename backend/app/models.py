@@ -2,16 +2,34 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Friend(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('blocked', 'Blocked'),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friends')
+    friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friend_of')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    requested_at = models.DateTimeField(auto_now_add=True)
 
-class FriendList(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="friend_list")
-    profile_img = models.ImageField(upload_to='pfp/', blank=True, null=True)
-    friends = models.ManyToManyField(User, blank=True, related_name="friends")
+    class Meta:
+        unique_together = ('user', 'friend')
 
-    def add_friend(self, friend):
-        if friend not in self.friends.all():
-            self.friends.add(friend)
+    def save(self, *args, **kwargs):
+        """Ensure that a friendship is unique in both directions."""
+        if Friend.objects.filter(user=self.friend, friend=self.user).exists():
+            raise ValueError("Friendship already exists in the reverse direction.")
+        super().save(*args, **kwargs)
 
-    def __str__(self):
-        friend_names = ", ".join([friend.username for friend in self.friends.all()])
-        return f"{self.user.username}'s friends: {friend_names if friend_names else 'No friends yet'}"
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
+    message_text = models.TextField()
+    sent_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['sender', 'receiver']),
+            models.Index(fields=['sent_at']),  # Indexing sent_at for faster sorting
+        ]

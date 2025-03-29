@@ -19,11 +19,11 @@ class MyConsumer(AsyncWebsocketConsumer):
         if self.scope["user"].is_anonymous:
             await self.close()
         else:
-            print(self.scope["user"].id)
+            print("this is other user",self.scope["user"].username)
             
             extra_data = self.scope.get("extra_data", {})
             # Corrected to access username from the extra_data dictionary
-            print(extra_data.get('username'))  # Use get() for safe access
+            print("this is current user",extra_data.get('username'))  # Use get() for safe access
             self.user1 = await sync_to_async(User.objects.get)(username = self.scope["user"])
             self.user2 = await sync_to_async(User.objects.get)(username = extra_data.get('username'))
 
