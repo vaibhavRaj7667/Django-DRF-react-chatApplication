@@ -19,11 +19,11 @@ class MyConsumer(AsyncWebsocketConsumer):
         if self.scope["user"].is_anonymous:
             await self.close()
         else:
-            print("this is other user",self.scope["user"].username)
+            print("this is current user",self.scope["user"].username)
             
             extra_data = self.scope.get("extra_data", {})
             # Corrected to access username from the extra_data dictionary
-            print("this is current user",extra_data.get('username'))  # Use get() for safe access
+            print("this is other user",extra_data.get('username'))  # Use get() for safe access
             self.user1 = await sync_to_async(User.objects.get)(username = self.scope["user"])
             self.user2 = await sync_to_async(User.objects.get)(username = extra_data.get('username'))
 
@@ -48,7 +48,8 @@ class MyConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
 
-        message_ = text_data_json['message']
+        # message_ = text_data_json['message']
+        message_ = text_data_json.get('message')
         sender_username = self.scope["user"].username
 
         message={
@@ -67,7 +68,14 @@ class MyConsumer(AsyncWebsocketConsumer):
 
 
     async def chat_message(self,event):
-        message = event["message"]
+        sender_username = event["message"]["sender_username"]
 
-        await self.send(text_data=json.dumps({"message":message}))
+    # Prevent sending the message back to the sender
+        if sender_username != self.scope["user"].username:
+            await self.send(text_data=json.dumps(event["message"]))
+        # await self.send(text_data=json.dumps(event["message"]))
+
+        # message = event["message"]
+
+        # await self.send(text_data=json.dumps({"message":message}))
 

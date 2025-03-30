@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404
 
 #this is test gitpush
 
+
 class ProtectedView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -26,6 +27,12 @@ class UserList(APIView):
         users = User.objects.all()
         serializer = UserSerializer(users,many=True)
         return Response(serializer.data , status=status.HTTP_200_OK)
+
+class currentuser(APIView):
+    def get(self, request):
+        id = request.user.id
+        return Response( {"id":id},status=status.HTTP_200_OK)
+
     
 
 class UserFriendsView(APIView):
@@ -54,7 +61,7 @@ class AddFriendView(APIView):
 
        
         if Friend.objects.filter(user=user, friend=friend).exists() or Friend.objects.filter(user=friend, friend=user).exists():
-            return Response({"error": "Friend request already sent or user is already your friend."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Friend request already sent or alreday freind"}, status=status.HTTP_400_BAD_REQUEST)
 
        
         friend_request = Friend.objects.create(user=user, friend=friend, status="pending")

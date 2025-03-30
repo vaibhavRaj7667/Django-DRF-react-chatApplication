@@ -18,8 +18,8 @@ class Friend(models.Model):
 
     def save(self, *args, **kwargs):
         """Ensure that a friendship is unique in both directions."""
-        if Friend.objects.filter(user=self.friend, friend=self.user).exists():
-            raise ValueError("Friendship already exists in the reverse direction.")
+        # if Friend.objects.filter(user=self.friend, friend=self.user).exists():
+        #     raise ValueError("Friendship already exists in the reverse direction.")
         super().save(*args, **kwargs)
 
 class Message(models.Model):
