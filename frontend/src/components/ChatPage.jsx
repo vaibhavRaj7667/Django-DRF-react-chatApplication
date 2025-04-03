@@ -94,7 +94,7 @@ const ChatPage = () => {
         setMessages(prev => [
           ...prev,
           {
-            incoming: messageData.sender_username !== selectedFriend.username,
+            incoming: messageData.sender_username === selectedFriend.username,
             text: messageData.message,
             sender: messageData.sender_username,
             timestamp: messageData.timestamp || new Date().toISOString()
@@ -187,7 +187,7 @@ const ChatPage = () => {
       <div className='chat_box'>
         {selectedFriend ? (
           <>
-            <div className="chat_header">
+            {/*<div className="chat_header">
               <img 
                 src={selectedFriend.avatar || "https://i.pinimg.com/736x/b6/d5/2e/b6d52e87bf3fb1f9c26672ad8e0370c3.jpg"} 
                 alt="User" 
@@ -196,12 +196,12 @@ const ChatPage = () => {
               <span className={`connection-status ${isConnected ? 'connected' : 'disconnected'}`}>
                 {isConnected ? 'Online' : 'Offline'}
               </span>
-            </div>
+            </div>*/}
 
             <div className="messages">
               {messages.map((msg, index) => (
                 <div key={index} className={`message ${msg.incoming ? 'incoming' : 'outgoing'}`}>
-                  <div className="sender">{msg.sender}</div>
+                  {/* <div className="sender">{msg.sender}</div> */}
                   <div className="text">{msg.text}</div>
                   <div className="timestamp">
                     {new Date(msg.timestamp).toLocaleTimeString()}
