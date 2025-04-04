@@ -32,7 +32,7 @@ class UserList(APIView):
         serializer = FriendSerializer(pending_sent,many=True)
         return Response(serializer.data , status=status.HTTP_200_OK)
     
-    def post(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         id =request.data.get("id")
         friend_instance = get_object_or_404(Friend, pk = id)
         data = {"status": request.data.get("status")}
