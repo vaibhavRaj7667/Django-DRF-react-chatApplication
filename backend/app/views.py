@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from app.serializer import CreateUserSerializer,UserSerializer
+from app.serializer import CreateUserSerializer,UserSerializer,FriendSerializer
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -25,9 +25,25 @@ class ProtectedView(APIView):
     
 class UserList(APIView):
     def get(self, request):
-        users = User.objects.all()
-        serializer = UserSerializer(users,many=True)
+        # users = User.objects.all()
+        current_user = get_object_or_404(User, id = request.user.id)
+        pending_sent = Friend.objects.filter(user=current_user, status='pending')
+
+        serializer = FriendSerializer(pending_sent,many=True)
         return Response(serializer.data , status=status.HTTP_200_OK)
+    
+    def post(self, request, *args, **kwargs):
+        id =request.data.get("id")
+        friend_instance = get_object_or_404(Friend, pk = id)
+        data = {"status": request.data.get("status")}
+        serializer = FriendSerializer(friend_instance, data=data, partial=True)  # partial=True allows partial updates
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class currentuser(APIView):
     def get(self, request):
