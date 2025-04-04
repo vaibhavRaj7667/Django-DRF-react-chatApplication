@@ -1,0 +1,17 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: "Gill Sans", sans-serif;
+
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 90%;
+    padding: 20px;
+    color: white;
+    background-color: rgb(81, 78, 78);
+}

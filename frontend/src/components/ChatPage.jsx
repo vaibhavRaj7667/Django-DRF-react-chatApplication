@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import '../stylesheet/chatPage.css';
 import axios from 'axios';
+import Button from '@mui/material/Button';
+import SideBar from './SideBar';
+
 
 const ChatPage = () => {
   
@@ -158,6 +161,9 @@ const ChatPage = () => {
 
   return (
     <div className='main'>
+      <div className='just'>
+        <SideBar/>
+      </div>
       {/* Friends list sidebar */}
       <div className='peoples'>
         <input 
@@ -218,9 +224,9 @@ const ChatPage = () => {
                 onKeyDown={handleKeyPress}
                 placeholder="Type a message..."
               />
-              <button onClick={sendMessage}>
+              <Button variant="contained" onClick={sendMessage}>
                 Send
-              </button>
+              </Button>
             </div>
           </>
         ) : (

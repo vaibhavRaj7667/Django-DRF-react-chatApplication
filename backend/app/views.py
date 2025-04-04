@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 # from app.models import FriendList
 from app.models import Friend
+from django.contrib.auth import logout
 
 from django.shortcuts import get_object_or_404
 
@@ -79,3 +80,10 @@ class createuser(APIView):
             serializer.save()
             return Response({"message": "User registered successfully!"}, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class LogoutUser(APIView):
+    def post(self, request):
+        logout(request)
+
+        return Response({"message":"logout succesful !"},status=status.HTTP_202_ACCEPTED)
