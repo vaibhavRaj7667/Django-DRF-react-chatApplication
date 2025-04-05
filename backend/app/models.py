@@ -18,11 +18,12 @@ class Friend(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)  
-
+        
+        
         if self.status == 'accepted':
             reverse_friendship, created = Friend.objects.get_or_create(
-                user=self.friend,
-                friend=self.user,
+                user=self.friend,  #this the friend assigned to user
+                friend=self.user,  #this is current user assigned to friend
                 defaults={'status': 'accepted'}
             )
             if not created and reverse_friendship.status != 'accepted':
