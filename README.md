@@ -29,7 +29,7 @@ This is a real-time chat application built using Django REST Framework (DRF) for
 ### Backend Setup (Django-DRF)
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/django-drf-react-chat.git
+   git clone https://github.com/vaibhavRaj7667/Django-DRF-react-chatApplication
    cd django-drf-react-chat/backend
    ```
 2. Create and activate virtual environment:
@@ -93,5 +93,5 @@ This project is licensed under the MIT License.
 ## Contact
 For questions or contributions, reach out:
 - Email: zivaibhav1@gmail.com
-- GitHub: [your-username](https://github.com/your-username/)
+- GitHub: https://github.com/vaibhavRaj7667
 
