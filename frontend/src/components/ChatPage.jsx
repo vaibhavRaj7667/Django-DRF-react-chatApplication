@@ -3,6 +3,7 @@ import '../stylesheet/chatPage.css';
 import axios from 'axios';
 import Button from '@mui/material/Button';
 import SideBar from './SideBar';
+import SendIcon from '@mui/icons-material/Send';
 
 
 const ChatPage = () => {
@@ -217,6 +218,7 @@ const ChatPage = () => {
               <div ref={messagesEndRef} />
             </div>
 
+            {/* text field */}
             <div className="input_area">
               <textarea 
                 value={newMessage} 
@@ -224,8 +226,8 @@ const ChatPage = () => {
                 onKeyDown={handleKeyPress}
                 placeholder="Type a message..."
               />
-              <Button variant="contained" onClick={sendMessage}>
-                Send
+              <Button style={{backgroundColor:'transparent', color:'white', borderRadius:'20px'}} onClick={sendMessage}>
+                   <SendIcon style={{color:'black'}}/>
               </Button>
             </div>
           </>

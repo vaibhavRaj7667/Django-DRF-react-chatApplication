@@ -4,6 +4,10 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
+import { Link } from 'react-router-dom';
+import AnnouncementIcon from '@mui/icons-material/Announcement';
+import DescriptionIcon from '@mui/icons-material/Description';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const SideBar = () => {
     const [open, setOpen] = useState(false);
@@ -49,8 +53,27 @@ const SideBar = () => {
             <div className='sidebar'>
 
 
-                <div>
-                    <Button variant='contained'>request</Button>
+                <div className='iocns'>
+
+                    <Button style={{backgroundColor:'transparent', color:'white', borderRadius:'20px'}}>
+
+                            <AnnouncementIcon fontSize='large'/>
+
+                    </Button>
+
+                    <Button style={{backgroundColor:'transparent', color:'white', borderRadius:'20px'}}>
+
+                            <DescriptionIcon fontSize='large'/>
+
+                    </Button>
+
+                    <Button style={{backgroundColor:'transparent', color:'white', borderRadius:'20px'}}>
+
+                            <SettingsIcon fontSize='large'/>
+
+                    </Button>
+                        
+
                 </div>
 
 

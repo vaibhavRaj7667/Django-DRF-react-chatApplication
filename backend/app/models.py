@@ -17,10 +17,24 @@ class Friend(models.Model):
         unique_together = ('user', 'friend')
 
     def save(self, *args, **kwargs):
-        """Ensure that a friendship is unique in both directions."""
-        # if Friend.objects.filter(user=self.friend, friend=self.user).exists():
-        #     raise ValueError("Friendship already exists in the reverse direction.")
-        super().save(*args, **kwargs)
+        super().save(*args, **kwargs)  
+
+        if self.status == 'accepted':
+            reverse_friendship, created = Friend.objects.get_or_create(
+                user=self.friend,
+                friend=self.user,
+                defaults={'status': 'accepted'}
+            )
+            if not created and reverse_friendship.status != 'accepted':
+                reverse_friendship.status = 'accepted'
+                reverse_friendship.save()
+
+
+    # def save(self, *args, **kwargs):
+    #     """Ensure that a friendship is unique in both directions."""
+    #     # if Friend.objects.filter(user=self.friend, friend=self.user).exists():
+    #     #     raise ValueError("Friendship already exists in the reverse direction.")
+    #     super().save(*args, **kwargs)
 
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')

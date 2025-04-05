@@ -10,8 +10,16 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 90%;
-    padding: 20px;
+    border-radius: 30px;
+    height: 95%;
+    padding: 15px;
     color: white;
-    background-color: rgb(81, 78, 78);
+    background-color: #493D9E;
+}
+
+.iocns {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
 }
