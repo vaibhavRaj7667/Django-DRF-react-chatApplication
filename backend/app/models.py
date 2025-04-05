@@ -26,7 +26,7 @@ class Friend(models.Model):
                 friend=self.user,  #this is current user assigned to friend
                 defaults={'status': 'accepted'}
             )
-            if not created and reverse_friendship.status != 'accepted':
+            if not created and reverse_friendship.status != 'accepted':  # here reverse_friendship.status if its alredy created its get the object
                 reverse_friendship.status = 'accepted'
                 reverse_friendship.save()
 
