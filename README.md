@@ -1,7 +1,7 @@
 # Django-DRF-React Chat Application
 
 ## Overview
-This is a real-time chat application built using Django REST Framework (DRF) for the backend and React for the frontend. The application allows users to register, log in, and participate in private or group chats. Messages are sent and received in real time using WebSockets.
+This is a real-time chat application built using Django REST Framework (DRF) for the backend and React for the frontend. The application allows users to register, log in, and participate in private. Messages are sent and received in real time using WebSockets.
 
 ## Features
 - User registration and authentication
