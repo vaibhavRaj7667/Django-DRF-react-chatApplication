@@ -3,8 +3,9 @@ import json
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-
+from app.models import Message
 from asgiref.sync import sync_to_async
+from channels.db import database_sync_to_async
 
 User = get_user_model()
 
@@ -52,6 +53,8 @@ class MyConsumer(AsyncWebsocketConsumer):
         message_ = text_data_json.get('message')
         sender_username = self.scope["user"].username
 
+        await self.save_message(sender_username, self.user2, message_)
+
         message={
             "message":message_,
             "sender_username":sender_username
@@ -70,6 +73,12 @@ class MyConsumer(AsyncWebsocketConsumer):
     async def chat_message(self,event):
         sender_username = event["message"]["sender_username"]
 
+        sync_to_async(Message.objects.create)(
+            sender = sender_username,
+            receiver = self.user2,
+            message_text = event["message"],
+        )
+
     # Prevent sending the message back to the sender
         if sender_username != self.scope["user"].username:
             await self.send(text_data=json.dumps(event["message"]))
@@ -78,4 +87,10 @@ class MyConsumer(AsyncWebsocketConsumer):
         # message = event["message"]
 
         # await self.send(text_data=json.dumps({"message":message}))
+    @database_sync_to_async
+    def save_message(self, sender , receiver, message):
+        user = User.objects.get(username = sender)
+        return Message.objects.create(sender = user , receiver = receiver, message_text = message)
+
+        
 
