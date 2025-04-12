@@ -19,6 +19,12 @@ This is a real-time chat application built using Django REST Framework (DRF) for
 - **Authentication:** JWT (JSON Web Tokens)
 - **Database:** PostgreSQL / SQLite (configurable)
 
+## Screenshots
+![Screenshot 2025-04-12 184008](https://github.com/user-attachments/assets/27dacd99-26fa-4906-ae19-4a6dff8d459d)
+
+![Screenshot 2025-04-12 184018](https://github.com/user-attachments/assets/da911543-762a-4118-8eca-ac371323e230)
+
+
 ## Installation Guide
 
 ### Prerequisites
