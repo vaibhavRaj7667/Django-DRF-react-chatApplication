@@ -34,9 +34,9 @@ body {
     cursor: pointer;
 }
 
-button:hover {
+/* button:hover {
     color: #8e2de2;
-}
+} */
 
 .signup-btn {
     background: linear-gradient(to right, #8e2de2, #ff6ec4);

@@ -1,101 +1,181 @@
-import React, { useState , createContext} from 'react'
-import '../stylesheet/LoginPage.css'
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { LoginState, SignupState } from '../features/loginState/LoginSlice';
+import { useState } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
+import { LoginState, SignupState } from "../features/loginState/LoginSlice"
+import "../stylesheet/LoginPage.css"
+import image1 from '../static/image1.png'
+
 
 const LoginPage = () => {
-
-  // const [login_, setlogin] = useState(true)
-  const login_ = useSelector((state)=> state.login.mode)
-  console.log(login_)
+  const login_ = useSelector((state) => state.login.mode)
   const dispatch = useDispatch()
-  const [loginData, setloginData] = useState({username: '', password:'' })
-  const [Register, setRegister]= useState({username:'', email:'', password:''})
+  const [loginData, setLoginData] = useState({ username: "", password: "" })
+  const [register, setRegister] = useState({ username: "", email: "", password: "" })
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
   const navigate = useNavigate()
-  
 
-  const handelLogin= async()=>{
-    
+  const handleLogin = async () => {
+    if (!loginData.username || !loginData.password) {
+      setError("Please fill in all fields")
+      return
+    }
+
+    setIsLoading(true)
+    setError("")
+
     try {
-      let response = await axios.post('http://127.0.0.1:8000/api/token/',{
-        username:loginData.username,
-        password:loginData.password
+      const response = await axios.post("http://127.0.0.1:8000/api/token/", {
+        username: loginData.username,
+        password: loginData.password,
       })
-      
+
       localStorage.setItem("access_token", response.data.access)
       localStorage.setItem("refresh_token", response.data.refresh)
-      console.log("Login successful:", response.data);
-      setloginData({username:'',password:''})
-      navigate('/chat')
+      setLoginData({ username: "", password: "" })
+      navigate("/chat")
     } catch (error) {
+      setError("Invalid username or password")
       console.log(error)
+    } finally {
+      setIsLoading(false)
     }
-    
   }
 
+  const handleRegister = async () => {
+    if (!register.username || !register.email || !register.password) {
+      setError("Please fill in all fields")
+      return
+    }
 
-  const register = async()=>{
-    console.log(Register)
+    setIsLoading(true)
+    setError("")
+
+    try {
+      // Replace with your actual registration endpoint
+      await axios.post("http://127.0.0.1:8000/api/register/", register)
+      setRegister({ username: "", email: "", password: "" })
+      dispatch(LoginState())
+    } catch (error) {
+      setError("Registration failed. Please try again.")
+      console.log(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
-
-  // const handleClick = (e) => {
-  //   e.preventDefault(); 
-  //   setlogin(!login_);
-  // };
 
   return (
-    <div className='main'>
-
-
-        <div className='picture'>
-
-            <img src="https://i.pinimg.com/736x/37/33/fb/3733fbff6774ea8ad337d196d9d76a76.jpg" alt="" />
-
+    <div className="login-container">
+      <div className="login-card">
+        <div className="login-image">
+          <img src={image1} alt="Login" />
         </div>
 
-        <div className='login-creditions'>
-            {login_ ==='login' 
-            ?
-             (
-            <div className='login'>
+        <div className="login-form-container">
+          <div className="form-header">
+            <h1>{login_ === "login" ? "Welcome Back" : "Create Account"}</h1>
+            <p className="form-subtitle">
+              {login_ === "login" ? "Please enter your credentials to continue" : "Fill in your details to get started"}
+            </p>
+          </div>
 
-              <h1>Login</h1>                
-                <input type="text" placeholder='Username' id='text' value={loginData.username} onChange={(e)=> setloginData({...loginData, username: e.target.value})} />
-                <input type="password" placeholder='Password' id='password' onChange={(e)=>setloginData({...loginData, password: e.target.value})}/>
+          {error && <div className="error-message">{error}</div>}
 
-                <button className='login-button' onClick={handelLogin}>Login</button>
+          {login_ === "login" ? (
+            <div className="login-form">
+              <div className="form-group">
+                <label htmlFor="username">Username</label>
+                <input
+                  type="text"
+                  id="username"
+                  placeholder="Enter your username"
+                  value={loginData.username}
+                  onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
+                />
+              </div>
 
-                <p>Don't have an account</p>
-                <button className='ternary-button' onClick={() => dispatch(SignupState())}>Register Now</button>
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Enter your password"
+                  value={loginData.password}
+                  onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                />
+              </div>
+
+              <button
+                className={`submit-button ${isLoading ? "loading" : ""}`}
+                onClick={handleLogin}
+                disabled={isLoading}
+              >
+                {isLoading ? "Logging in..." : "Login"}
+              </button>
+
+              <div className="form-footer">
+                <p>Don't have an account?</p>
+                <button className="switch-form-button" onClick={() => dispatch(SignupState())}>
+                  Register Now
+                </button>
+              </div>
             </div>
-            )
+          ) : (
+            <div className="register-form">
+              <div className="form-group">
+                <label htmlFor="reg-username">Username</label>
+                <input
+                  type="text"
+                  id="reg-username"
+                  placeholder="Choose a username"
+                  value={register.username}
+                  onChange={(e) => setRegister({ ...register, username: e.target.value })}
+                />
+              </div>
 
-             :
-              (
-            <div className='register'>
-              <h1>Sign up</h1>
-              <input type="text" placeholder='Username' value={Register.username} onChange={(e)=>setRegister({...Register, username:e.target.value})}/>
-              <input type="email" placeholder='Email' value={Register.email} onChange={(e)=>setRegister({...Register, email:e.target.value})}/>
-              <input type="password"  placeholder='Password' value={Register.password} onChange={(e)=>setRegister({...Register, password:e.target.value})}/>
-              <button className='Register_button' >Register</button>
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Enter your email"
+                  value={register.email}
+                  onChange={(e) => setRegister({ ...register, email: e.target.value })}
+                />
+              </div>
 
-             
-              <p>Already have an account</p>
-              <button className='link-like' onClick={() => dispatch(LoginState())}>Login here</button>
-              
+              <div className="form-group">
+                <label htmlFor="reg-password">Password</label>
+                <input
+                  type="password"
+                  id="reg-password"
+                  placeholder="Create a password"
+                  value={register.password}
+                  onChange={(e) => setRegister({ ...register, password: e.target.value })}
+                />
+              </div>
+
+              <button
+                className={`submit-button ${isLoading ? "loading" : ""}`}
+                onClick={handleRegister}
+                disabled={isLoading}
+              >
+                {isLoading ? "Creating Account..." : "Register"}
+              </button>
+
+              <div className="form-footer">
+                <p>Already have an account?</p>
+                <button className="switch-form-button" onClick={() => dispatch(LoginState())}>
+                  Login here
+                </button>
+              </div>
             </div>
-              )
-             
-             }
-
+          )}
         </div>
-        
+      </div>
     </div>
-    
   )
 }
-
 
 export default LoginPage
