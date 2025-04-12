@@ -4,15 +4,17 @@ import { BrowserRouter } from "react-router";
 import { HeroUIProvider } from '@heroui/react';
 import App from './App.jsx'
 import './index.css'
+import { store } from './redux/store.js';
+import { Provider } from 'react-redux'
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-      <BrowserRouter>
-      <HeroUIProvider>
+      <BrowserRouter >
+          <Provider store={store}>
+                <App />    
 
-      <App />    
-
-      </HeroUIProvider>
+          </Provider>
       </BrowserRouter>
     
 

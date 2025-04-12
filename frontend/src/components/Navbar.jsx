@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
 import '../stylesheet/navbar.css';
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { LoginState, SignupState } from '../features/loginState/LoginSlice';
 
 const Navbar = () => {
+  const login_ = useSelector((state)=> state.login.mode)
+  const dispatch = useDispatch()
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate()
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const HandelLogin=()=>{
+    dispatch(LoginState())
+    navigate('/login')
+  }
 
   return (
     <div>
@@ -23,7 +34,7 @@ const Navbar = () => {
         </div>
 
         <div className="desktop-nav">
-          <button className="login-btn">Login</button>
+          <button className="login-btn" onClick={HandelLogin}>Login</button>
           <button className="signup-btn">signup</button>
         </div>
 

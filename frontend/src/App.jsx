@@ -6,16 +6,16 @@ import LandingPage from './components/LandingPage';
 
 
 
-
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/chat" element={<ChatPage />} />
-        <Route path='/land' element={<LandingPage/>}/>
+        <Route path='/' element={<LandingPage/>}/>
+        
       </Routes>
         
     </>

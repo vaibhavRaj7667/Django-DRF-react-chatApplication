@@ -1,15 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState , createContext} from 'react'
 import '../stylesheet/LoginPage.css'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { LoginState, SignupState } from '../features/loginState/LoginSlice';
 
 const LoginPage = () => {
 
-  const [login_, setlogin] = useState(true)
+  // const [login_, setlogin] = useState(true)
+  const login_ = useSelector((state)=> state.login.mode)
+  console.log(login_)
+  const dispatch = useDispatch()
   const [loginData, setloginData] = useState({username: '', password:'' })
   const [Register, setRegister]= useState({username:'', email:'', password:''})
   const navigate = useNavigate()
+  
 
   const handelLogin= async()=>{
     
@@ -35,13 +40,14 @@ const LoginPage = () => {
     console.log(Register)
   }
 
-  const handleClick = (e) => {
-    e.preventDefault(); // Prevents page reload
-    setlogin(!login_);
-  };
+  // const handleClick = (e) => {
+  //   e.preventDefault(); 
+  //   setlogin(!login_);
+  // };
 
   return (
     <div className='main'>
+
 
         <div className='picture'>
 
@@ -50,9 +56,9 @@ const LoginPage = () => {
         </div>
 
         <div className='login-creditions'>
-            {login_
-            
-            ? (
+            {login_ ==='login' 
+            ?
+             (
             <div className='login'>
 
               <h1>Login</h1>                
@@ -62,7 +68,7 @@ const LoginPage = () => {
                 <button className='login-button' onClick={handelLogin}>Login</button>
 
                 <p>Don't have an account</p>
-                <button className='ternary-button' onClick={handleClick}>Register Now</button>
+                <button className='ternary-button' onClick={() => dispatch(SignupState())}>Register Now</button>
             </div>
             )
 
@@ -73,11 +79,11 @@ const LoginPage = () => {
               <input type="text" placeholder='Username' value={Register.username} onChange={(e)=>setRegister({...Register, username:e.target.value})}/>
               <input type="email" placeholder='Email' value={Register.email} onChange={(e)=>setRegister({...Register, email:e.target.value})}/>
               <input type="password"  placeholder='Password' value={Register.password} onChange={(e)=>setRegister({...Register, password:e.target.value})}/>
-              <button className='Register_button' onClick={register}>Register</button>
+              <button className='Register_button' >Register</button>
 
              
               <p>Already have an account</p>
-              <button className='link-like' onClick={handleClick}>Login here</button>
+              <button className='link-like' onClick={() => dispatch(LoginState())}>Login here</button>
               
             </div>
               )
@@ -87,7 +93,9 @@ const LoginPage = () => {
         </div>
         
     </div>
+    
   )
 }
+
 
 export default LoginPage
