@@ -4,7 +4,8 @@ import axios from 'axios';
 import Button from '@mui/material/Button';
 import SideBar from './SideBar';
 import SendIcon from '@mui/icons-material/Send';
-
+import { Refresh } from './RefreshToken';
+import Navbar from './Navbar';
 
 const ChatPage = () => {
   
@@ -19,7 +20,7 @@ const ChatPage = () => {
   const [id, setid] = useState(null)
 
 
- 
+
   const fetchUserId = async () => {
       try {
           const token = localStorage.getItem('access_token');
@@ -159,6 +160,44 @@ const ChatPage = () => {
       sendMessage();
     }
   }, [sendMessage]);
+
+
+
+  useEffect(()=>{
+  
+    const fetchMessage= async()=>{
+      if (!selectedFriend) return;
+      try {
+        const token = localStorage.getItem('access_token')
+        await axios.get('http://127.0.0.1:8000/messages/',
+          {
+          headers: { Authorization: `Bearer ${token}` },
+          params: {
+            otheruser: selectedFriend.username
+          }
+        })
+        .then((response)=>{
+            const formattedMessages = response.data.map(msg => ({
+            incoming: msg.sender !== id, 
+            text: msg.message_text,
+            sender: msg.sender,
+            timestamp: msg.sent_at
+            }));
+    
+          setMessages(formattedMessages); 
+
+
+
+          console.log(response.data)
+        })
+      } catch (error) {
+        console.log("E",error)
+      }
+    } 
+
+    fetchMessage()
+
+  },[selectedFriend])
 
   return (
     <div className='main'>

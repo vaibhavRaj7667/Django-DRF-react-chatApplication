@@ -30,4 +30,5 @@ urlpatterns = [
     path('request/',AddFriendView.as_view(),name="AddFriendView"),
     path('currentuser/',currentuser.as_view()),
     path('logout/',LogoutUser.as_view()),
+    path('messages/',GetMessage.as_view()),
 ]

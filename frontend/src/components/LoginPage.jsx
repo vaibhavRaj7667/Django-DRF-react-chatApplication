@@ -54,7 +54,7 @@ const LoginPage = () => {
 
     try {
       // Replace with your actual registration endpoint
-      await axios.post("http://127.0.0.1:8000/api/register/", register)
+      await axios.post("http://127.0.0.1:8000/register/", register)
       setRegister({ username: "", email: "", password: "" })
       dispatch(LoginState())
     } catch (error) {

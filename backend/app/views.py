@@ -1,13 +1,14 @@
 from django.shortcuts import render
-from app.serializer import CreateUserSerializer,UserSerializer,FriendSerializer
+from app.serializer import CreateUserSerializer,UserSerializer,FriendSerializer,MessageSerializer
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 # from app.models import FriendList
-from app.models import Friend
+from app.models import Friend, Message
 from django.contrib.auth import logout
+from django.db.models import Q
 
 from django.shortcuts import get_object_or_404
 
@@ -23,6 +24,21 @@ class ProtectedView(APIView):
         
         return Response({"message": f"This is a protected route ${user}"})
     
+class GetMessage(APIView):
+    def get(self, request):
+        user = request.user
+        lol= request.query_params.get('otheruser')
+        other = User.objects.get(username = lol)
+        messages  = Message.objects.filter(
+            Q(sender= user, receiver = other) | Q(sender = other, receiver = user)
+        ).order_by('sent_at')
+
+        Serializer= MessageSerializer(messages , many = True)
+
+        return Response(Serializer.data, status=status.HTTP_200_OK)
+        
+
+    
 class UserList(APIView):
     def get(self, request):
         # users = User.objects.all()
@@ -32,7 +48,7 @@ class UserList(APIView):
         serializer = FriendSerializer(pending_sent,many=True)
         return Response(serializer.data , status=status.HTTP_200_OK)
     
-    def patch(self, request, *args, **kwargs):
+    def patch(self, request):
         id =request.data.get("id")
         friend_instance = get_object_or_404(Friend, pk = id)
         data = {"status": request.data.get("status")}

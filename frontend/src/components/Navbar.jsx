@@ -14,6 +14,11 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const HandelSignup=()=>{
+    dispatch(SignupState())
+    navigate('/login')
+  }
+
   const HandelLogin=()=>{
     dispatch(LoginState())
     navigate('/login')
@@ -35,7 +40,7 @@ const Navbar = () => {
 
         <div className="desktop-nav">
           <button className="login-btn" onClick={HandelLogin}>Login</button>
-          <button className="signup-btn">signup</button>
+          <button className="signup-btn" onClick={HandelSignup}>signup</button>
         </div>
 
         

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from app.models import Friend
+from app.models import Friend,Message
 
 
 
@@ -8,6 +8,11 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields =  ['username', 'id']
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ['id', 'sender', 'receiver', 'message_text', 'sent_at']
 
 
 class FriendSerializer(serializers.ModelSerializer):
